@@ -1,8 +1,24 @@
 package br.com.sales.models;
 
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+@Entity
+@Table(name= "tb_cliente")
 public class ClienteModel {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
+
+    @Column(name = "nome")
+    @NotBlank(message = "O campo 'nome' não pode estar em branco ou vazio")
+    @Size( min = 3, max = 50)
     private String nome;
 
     public ClienteModel(){}
