@@ -16,7 +16,7 @@ public class SalesApplication {
         return args -> {
             System.out.println("Salvando clientes");
             clienteRepository.save(new ClienteModel("User1"));
-            clienteRepository.save(new ClienteModel("User1"));
+            clienteRepository.save(new ClienteModel("User2"));
 
             boolean existe = clienteRepository.existsByNome("User1");
             System.out.println("existe um cliente com o nome User1? " + existe);
