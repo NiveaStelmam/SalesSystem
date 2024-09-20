@@ -1,41 +1,30 @@
 package br.com.sales.models;
 
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name= "tb_itemPedido")
 public class ItemPedidoModel {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
     private PedidoModel pedido;
+    
+    @ManyToOne
+    @JoinColumn(name = "produto_ID")
     private ProdutoModel produto;
     private Integer quantidade;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public PedidoModel getPedido() {
-        return pedido;
-    }
-
-    public void setPedido(PedidoModel pedido) {
-        this.pedido = pedido;
-    }
-
-    public ProdutoModel getProduto() {
-        return produto;
-    }
-
-    public void setProduto(ProdutoModel produto) {
-        this.produto = produto;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
 }
