@@ -1,27 +1,39 @@
 package br.com.sales;
 
-import br.com.sales.models.ClienteModel;
+import br.com.sales.domain.ClienteModel;
+import br.com.sales.domain.PedidoModel;
 import br.com.sales.repository.ClienteRepository;
+import br.com.sales.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+
 @SpringBootApplication
 public class SalesApplication {
 
     @Bean
-    public CommandLineRunner init(@Autowired ClienteRepository clienteRepository){
+    public CommandLineRunner init(@Autowired ClienteRepository clienteRepository, PedidoRepository pedidoRepository){
         return args -> {
             System.out.println("Salvando clientes");
-            clienteRepository.save(new ClienteModel("User1"));
-            clienteRepository.save(new ClienteModel("User2"));
+            ClienteModel user = new ClienteModel("User");
+            clienteRepository.save(user);
 
-            boolean existe = clienteRepository.existsByNome("User1");
-            System.out.println("existe um cliente com o nome User1? " + existe);
+            PedidoModel p = new PedidoModel();
+            p.setCliente(user);
+            p.setDataPedido(LocalDate.now());
+            p.setTotal(BigDecimal.valueOf(100));
 
+            pedidoRepository.save(p);
 
+            ClienteModel cliente = clienteRepository.findClienteFetchPedidos(user.getId());
+            System.out.println(cliente);
+            System.out.println(cliente.getPedidos());
         };
     }
 

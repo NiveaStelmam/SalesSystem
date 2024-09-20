@@ -1,4 +1,4 @@
-package br.com.sales.models;
+package br.com.sales.domain;
 
 
 import jakarta.persistence.*;
@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,6 +27,9 @@ public class ClienteModel {
     @NotBlank(message = "O campo 'nome' não pode estar em branco ou vazio")
     @Size( min = 3, max = 50)
     private String nome;
+
+    @OneToMany( mappedBy = "cliente", fetch = FetchType.LAZY) // não traz todos os pedidos do cliente
+    private Set<PedidoModel> pedidos; // set or List
 
     // ---------------------------------------------
 
