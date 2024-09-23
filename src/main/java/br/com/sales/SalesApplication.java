@@ -31,9 +31,12 @@ public class SalesApplication {
 
             pedidoRepository.save(p);
 
-            ClienteModel cliente = clienteRepository.findClienteFetchPedidos(user.getId());
-            System.out.println(cliente);
-            System.out.println(cliente.getPedidos());
+//            ClienteModel cliente = clienteRepository.findClienteFetchPedidos(user.getId());
+//            System.out.println(cliente);
+//            System.out.println(cliente.getPedidos());
+
+           pedidoRepository.findByCliente(user).forEach(System.out::println);
+
         };
     }
 

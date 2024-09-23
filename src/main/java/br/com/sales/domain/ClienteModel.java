@@ -4,10 +4,10 @@ package br.com.sales.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name= "tb_cliente")
+
 public class ClienteModel {
 
     @Id
@@ -28,12 +29,13 @@ public class ClienteModel {
     @Size( min = 3, max = 50)
     private String nome;
 
-    @OneToMany( mappedBy = "cliente", fetch = FetchType.LAZY) // não traz todos os pedidos do cliente
-    private Set<PedidoModel> pedidos; // set or List
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY) // não traz todos os pedidos do cliente
+    private Set<PedidoModel> pedidos = new HashSet<>(); // set or List
 
     // ---------------------------------------------
 
     public ClienteModel(String nome){
         this.nome = nome;
     }
+
 }

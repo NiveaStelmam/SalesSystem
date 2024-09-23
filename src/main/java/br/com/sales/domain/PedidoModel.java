@@ -1,9 +1,7 @@
 package br.com.sales.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,6 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name= "tb_pedido")
+@ToString(exclude = "cliente")
+@EqualsAndHashCode(exclude = "cliente")
 public class PedidoModel {
 
     @Id
@@ -32,9 +32,7 @@ public class PedidoModel {
     @Column(name = "total", precision = 20, scale = 2)
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "pedido")
-    private List<ItemPedidoModel> itens;
-
-
+//    @OneToMany(mappedBy = "pedido")
+//    private List<ItemPedidoModel> itens;
 
 }
