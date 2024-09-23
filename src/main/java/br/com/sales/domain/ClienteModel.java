@@ -1,6 +1,7 @@
 package br.com.sales.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -29,17 +30,19 @@ public class ClienteModel {
     @Size( min = 3, max = 50)
     private String nome;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY) // não traz todos os pedidos do cliente
     private Set<PedidoModel> pedidos = new HashSet<>(); // set or List
 
     // ---------------------------------------------
 
-    public ClienteModel(String nome){
+    public ClienteModel(UUID id, String nome){
+        this.id = id;
         this.nome = nome;
     }
-    public ClienteModel(String nome, UUID id){
+
+    public ClienteModel(String nome){
         this.nome = nome;
-        this.id = id;
     }
 
 }

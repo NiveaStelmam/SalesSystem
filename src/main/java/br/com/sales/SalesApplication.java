@@ -15,7 +15,7 @@ public class SalesApplication {
     @Bean
     public CommandLineRunner commandLineRunner (@Autowired ClienteRepository clienteRepository){
         return args -> {
-            ClienteModel c = new ClienteModel ("UserTest", null);
+            ClienteModel c = new ClienteModel (null, "UserTest");
             clienteRepository.save(c);
         };
     }

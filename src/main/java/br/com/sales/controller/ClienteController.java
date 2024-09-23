@@ -19,6 +19,7 @@ public class ClienteController {
         this.clienteRepository = clienteRepository;
     }
 
+
     @GetMapping("/{id}")
     @ResponseBody // converts the method return into a JSON type object
     public ResponseEntity getClienteById(@PathVariable UUID id){
@@ -28,6 +29,13 @@ public class ClienteController {
             return ResponseEntity.ok(cliente.get());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/cadastrar")
+    @ResponseBody
+    public ResponseEntity save(@RequestBody ClienteModel cliente){
+        clienteRepository.save(cliente);
+        return ResponseEntity.ok(cliente);
     }
 
 }
