@@ -37,5 +37,9 @@ public class ClienteModel {
     public ClienteModel(String nome){
         this.nome = nome;
     }
+    public ClienteModel(String nome, UUID id){
+        this.nome = nome;
+        this.id = id;
+    }
 
 }
