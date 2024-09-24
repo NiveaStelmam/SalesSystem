@@ -25,6 +25,9 @@ public class ClienteModel {
     @Column(name = "id")
     private UUID id;
 
+    @Column(name = "cpf", length = 11)
+    private String cpf;
+
     @Column(name = "nome")
     @NotBlank(message = "O campo 'nome' não pode estar em branco ou vazio")
     @Size( min = 3, max = 50)

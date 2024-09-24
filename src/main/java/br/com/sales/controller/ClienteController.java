@@ -2,7 +2,8 @@ package br.com.sales.controller;
 
 import br.com.sales.domain.ClienteModel;
 import br.com.sales.repository.ClienteRepository;
-import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +68,22 @@ public class ClienteController {
                     return ResponseEntity.noContent().build();
                 }).orElseGet( () -> ResponseEntity.notFound().build() );
     }
+
+    @GetMapping("/listar-todos")
+    public ResponseEntity findByParameter(ClienteModel filter){
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreCase() // considera valores de strings maiusculas/minusculas
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example example = Example.of(filter, matcher);
+        List<ClienteModel> lista = clienteRepository.findAll(example);
+        return ResponseEntity.ok(lista);
+
+    }
+
+
+
+
 
 //    ------ Outra forma ------------
 //    @PutMapping("/atualizar/{id}")
