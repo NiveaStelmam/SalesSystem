@@ -4,15 +4,17 @@ import br.com.sales.domain.ClienteModel;
 import br.com.sales.repository.ClienteRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/clientes")
 public class ClienteController {
 
@@ -25,69 +27,60 @@ public class ClienteController {
 
 
     @GetMapping("/listar-por-id/{id}")
-    @ResponseBody // converts the method return into a JSON type object
-    public ResponseEntity getClienteById(@PathVariable UUID id){
-        System.out.println("AQUIIII");
-        Optional<ClienteModel> cliente = clienteRepository.findById(id);
+    public ClienteModel getClienteById(@PathVariable UUID id){
+       return clienteRepository
+               .findById(id)
+               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 
-        if (cliente.isPresent()){
-            return ResponseEntity.ok(cliente.get());
-        }
-        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/cadastrar")
-    @ResponseBody
-    public ResponseEntity save(@RequestBody ClienteModel cliente){
-        clienteRepository.save(cliente);
-        return ResponseEntity.ok(cliente);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClienteModel save(@RequestBody ClienteModel cliente){
+        return clienteRepository.save(cliente);
     }
 
     @DeleteMapping("/excluir/{id}")
-    @ResponseBody
-    public ResponseEntity delete(@PathVariable UUID id){
-        Optional<ClienteModel> cliente = clienteRepository.findById(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete (@PathVariable UUID id){
+        clienteRepository
+                .findById(id)
+                .map( clienteModel -> {
+                    clienteRepository.delete(clienteModel);
+                    return clienteModel;
 
-        if (cliente.isPresent()){
-            clienteRepository.delete(cliente.get());
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+
+
     }
 
-
     @PutMapping("/atualizar/{id}")
-    @ResponseBody
-    public ResponseEntity update( @PathVariable UUID id,
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update( @PathVariable UUID id,
                                   @RequestBody ClienteModel cliente ){
-        return clienteRepository
+        clienteRepository
                 .findById(id)
                 .map( clienteExistente -> { // se o optional estiver populado, o map é executado
                     cliente.setId(clienteExistente.getId());
                     clienteRepository.save(cliente);
-                    return ResponseEntity.noContent().build();
-                }).orElseGet( () -> ResponseEntity.notFound().build() );
+                    return clienteExistente;
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
     }
 
     @GetMapping("/listar-todos")
-    public ResponseEntity findByParameter(ClienteModel filter){
+    public List<ClienteModel> findByParameter(ClienteModel filter){
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
                 .withIgnoreCase() // considera valores de strings maiusculas/minusculas
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         Example example = Example.of(filter, matcher);
-        List<ClienteModel> lista = clienteRepository.findAll(example);
-        return ResponseEntity.ok(lista);
+        return clienteRepository.findAll(example);
 
     }
 
-
-
-
-
 //    ------ Outra forma ------------
 //    @PutMapping("/atualizar/{id}")
-//    @ResponseBody
 //    public ResponseEntity update(@PathVariable UUID id, @RequestBody ClienteModel cliente) {
 //        return clienteRepository.findById(id).map(clienteExistente -> {
 //            BeanUtils.copyProperties(cliente, clienteExistente, "id");
