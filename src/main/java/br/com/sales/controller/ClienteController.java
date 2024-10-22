@@ -2,16 +2,14 @@ package br.com.sales.controller;
 
 import br.com.sales.domain.ClienteModel;
 import br.com.sales.repository.ClienteRepository;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -24,7 +22,6 @@ public class ClienteController {
         this.clienteRepository = clienteRepository;
 
     }
-
 
     @GetMapping("/listar-por-id/{id}")
     public ClienteModel getClienteById(@PathVariable UUID id){

@@ -13,6 +13,9 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: create
+server:
+  error:
+    include-message: always
 
 
 
